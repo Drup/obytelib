@@ -82,6 +82,11 @@ external caml_final_release : 'a -> 'a = "caml_final_release"
 external caml_float_compare : 'a -> 'a = "caml_float_compare"
 external caml_float_of_int : 'a -> 'a = "caml_float_of_int"
 external caml_float_of_string : 'a -> 'a = "caml_float_of_string"
+external caml_floatarray_create : 'a -> 'a = "caml_floatarray_create"
+external caml_floatarray_get : 'a -> 'a = "caml_floatarray_get"
+external caml_floatarray_set : 'a -> 'a = "caml_floatarray_set"
+external caml_floatarray_unsafe_get : 'a -> 'a = "caml_floatarray_unsafe_get"
+external caml_floatarray_unsafe_set : 'a -> 'a = "caml_floatarray_unsafe_set"
 external caml_floor_float : 'a -> 'a = "caml_floor_float"
 external caml_fmod_float : 'a -> 'a = "caml_fmod_float"
 external caml_format_float : 'a -> 'a = "caml_format_float"
@@ -272,10 +277,13 @@ external caml_register_channel_for_spacetime : 'a -> 'a = "caml_register_channel
 external caml_register_named_value : 'a -> 'a = "caml_register_named_value"
 external caml_reify_bytecode : 'a -> 'a = "caml_reify_bytecode"
 external caml_remove_debug_info : 'a -> 'a = "caml_remove_debug_info"
+external caml_reset_afl_instrumentation : 'a -> 'a = "caml_reset_afl_instrumentation"
+external caml_restore_raw_backtrace : 'a -> 'a = "caml_restore_raw_backtrace"
 external caml_runtime_parameters : 'a -> 'a = "caml_runtime_parameters"
 external caml_runtime_variant : 'a -> 'a = "caml_runtime_variant"
 external caml_set_oo_id : 'a -> 'a = "caml_set_oo_id"
 external caml_set_parser_trace : 'a -> 'a = "caml_set_parser_trace"
+external caml_setup_afl : 'a -> 'a = "caml_setup_afl"
 external caml_sin_float : 'a -> 'a = "caml_sin_float"
 external caml_sinh_float : 'a -> 'a = "caml_sinh_float"
 external caml_spacetime_enabled : 'a -> 'a = "caml_spacetime_enabled"
@@ -316,8 +324,8 @@ external caml_sys_get_argv : 'a -> 'a = "caml_sys_get_argv"
 external caml_sys_get_config : 'a -> 'a = "caml_sys_get_config"
 external caml_sys_getcwd : 'a -> 'a = "caml_sys_getcwd"
 external caml_sys_getenv : 'a -> 'a = "caml_sys_getenv"
-external caml_sys_isatty : 'a -> 'a = "caml_sys_isatty"
 external caml_sys_is_directory : 'a -> 'a = "caml_sys_is_directory"
+external caml_sys_isatty : 'a -> 'a = "caml_sys_isatty"
 external caml_sys_open : 'a -> 'a = "caml_sys_open"
 external caml_sys_random_seed : 'a -> 'a = "caml_sys_random_seed"
 external caml_sys_read_directory : 'a -> 'a = "caml_sys_read_directory"
@@ -325,6 +333,8 @@ external caml_sys_remove : 'a -> 'a = "caml_sys_remove"
 external caml_sys_rename : 'a -> 'a = "caml_sys_rename"
 external caml_sys_system_command : 'a -> 'a = "caml_sys_system_command"
 external caml_sys_time : 'a -> 'a = "caml_sys_time"
+external caml_sys_time_include_children : 'a -> 'a = "caml_sys_time_include_children"
+external caml_sys_unsafe_getenv : 'a -> 'a = "caml_sys_unsafe_getenv"
 external caml_tan_float : 'a -> 'a = "caml_tan_float"
 external caml_tanh_float : 'a -> 'a = "caml_tanh_float"
 external caml_terminfo_backup : 'a -> 'a = "caml_terminfo_backup"
@@ -423,6 +433,11 @@ let find_prim name =
   | "caml_float_compare" -> Obj.repr caml_float_compare
   | "caml_float_of_int" -> Obj.repr caml_float_of_int
   | "caml_float_of_string" -> Obj.repr caml_float_of_string
+  | "caml_floatarray_create" -> Obj.repr caml_floatarray_create
+  | "caml_floatarray_get" -> Obj.repr caml_floatarray_get
+  | "caml_floatarray_set" -> Obj.repr caml_floatarray_set
+  | "caml_floatarray_unsafe_get" -> Obj.repr caml_floatarray_unsafe_get
+  | "caml_floatarray_unsafe_set" -> Obj.repr caml_floatarray_unsafe_set
   | "caml_floor_float" -> Obj.repr caml_floor_float
   | "caml_fmod_float" -> Obj.repr caml_fmod_float
   | "caml_format_float" -> Obj.repr caml_format_float
@@ -613,10 +628,13 @@ let find_prim name =
   | "caml_register_named_value" -> Obj.repr caml_register_named_value
   | "caml_reify_bytecode" -> Obj.repr caml_reify_bytecode
   | "caml_remove_debug_info" -> Obj.repr caml_remove_debug_info
+  | "caml_reset_afl_instrumentation" -> Obj.repr caml_reset_afl_instrumentation
+  | "caml_restore_raw_backtrace" -> Obj.repr caml_restore_raw_backtrace
   | "caml_runtime_parameters" -> Obj.repr caml_runtime_parameters
   | "caml_runtime_variant" -> Obj.repr caml_runtime_variant
   | "caml_set_oo_id" -> Obj.repr caml_set_oo_id
   | "caml_set_parser_trace" -> Obj.repr caml_set_parser_trace
+  | "caml_setup_afl" -> Obj.repr caml_setup_afl
   | "caml_sin_float" -> Obj.repr caml_sin_float
   | "caml_sinh_float" -> Obj.repr caml_sinh_float
   | "caml_spacetime_enabled" -> Obj.repr caml_spacetime_enabled
@@ -657,8 +675,8 @@ let find_prim name =
   | "caml_sys_get_config" -> Obj.repr caml_sys_get_config
   | "caml_sys_getcwd" -> Obj.repr caml_sys_getcwd
   | "caml_sys_getenv" -> Obj.repr caml_sys_getenv
-  | "caml_sys_isatty" -> Obj.repr caml_sys_isatty
   | "caml_sys_is_directory" -> Obj.repr caml_sys_is_directory
+  | "caml_sys_isatty" -> Obj.repr caml_sys_isatty
   | "caml_sys_open" -> Obj.repr caml_sys_open
   | "caml_sys_random_seed" -> Obj.repr caml_sys_random_seed
   | "caml_sys_read_directory" -> Obj.repr caml_sys_read_directory
@@ -666,6 +684,8 @@ let find_prim name =
   | "caml_sys_rename" -> Obj.repr caml_sys_rename
   | "caml_sys_system_command" -> Obj.repr caml_sys_system_command
   | "caml_sys_time" -> Obj.repr caml_sys_time
+  | "caml_sys_time_include_children" -> Obj.repr caml_sys_time_include_children
+  | "caml_sys_unsafe_getenv" -> Obj.repr caml_sys_unsafe_getenv
   | "caml_tan_float" -> Obj.repr caml_tan_float
   | "caml_tanh_float" -> Obj.repr caml_tanh_float
   | "caml_terminfo_backup" -> Obj.repr caml_terminfo_backup
